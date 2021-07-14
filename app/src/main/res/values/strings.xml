@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">My Fitness Diary</string>
+    <string name="insert_email_login">Insert email</string>
+    <string name="insert_password_login">Insert password</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_create_account_login">Create account</string>
 </resources>
