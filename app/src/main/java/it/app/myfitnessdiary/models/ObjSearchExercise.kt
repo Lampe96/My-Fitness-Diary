@@ -10,14 +10,14 @@ import java.io.Serializable
  */
 
 data class ObjSearchExercise(
-    var muscle: String?,
-    var nameExercise: String?,
+    var muscle: String? = null,
+    var nameExercise: String? = null,
 ) : Parcelable {
+
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(muscle)

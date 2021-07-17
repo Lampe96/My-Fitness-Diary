@@ -10,18 +10,18 @@ import java.io.Serializable
  */
 
 data class ObjExercise(
-    var nameExercise: String?,
-    var numSeries: String?,
-    var numReps: String?,
-    var recovery: Int?,
+    var nameExercise: String? = null,
+    var numSeries: String? = null,
+    var numReps: String? = null,
+    var recovery: Int? = null,
 ) : Parcelable {
+
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readValue(Int::class.java.classLoader) as? Int
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(nameExercise)

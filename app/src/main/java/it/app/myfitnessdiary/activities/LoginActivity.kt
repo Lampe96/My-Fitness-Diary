@@ -1,41 +1,93 @@
-package it.app.myfitnessdiary
+package it.app.myfitnessdiary.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doOnTextChanged
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.google.android.material.snackbar.Snackbar
+import it.app.myfitnessdiary.R
+import it.app.myfitnessdiary.databinding.ActivityLoginBinding
 import it.app.myfitnessdiary.firebase.FireAuth
 
 
 /**
- * Class dedicated to the login, FB and not FB
+ * Class dedicated to the login
  */
 
-class ActivityLogin : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     private val TAG = "ACTIVITY_LOGIN"
-    private val auth = Firebase.auth
-    private lateinit var callbackManager: CallbackManager
+    private lateinit var binding: ActivityLoginBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
 
-        emailFieldLogin.doOnTextChanged { _, _, _, _ ->
-            layoutLoginEditTextEmail.error = null
+        binding = ActivityLoginBinding.inflate(LayoutInflater.from(this))
+
+        binding.emailFieldLogin.doOnTextChanged { _, _, _, _ ->
+            binding.layoutLoginEditTextEmail.error = null
         }
 
-        passwordFieldLogin.doOnTextChanged { _, _, _, _ ->
-            layoutLoginEditTextPassword.error = null
+        binding.passwordFieldLogin.doOnTextChanged { _, _, _, _ ->
+            binding.layoutLoginEditTextPassword.error = null
+        }
+
+        binding.btnLogin.setOnClickListener {
+            val email = binding.emailFieldLogin.text.toString().trim()
+            val password = binding.passwordFieldLogin.text.toString().trim()
+
+            //Setting the visibility for login
+            setVisibilityForLoginNoFB()
+
+            //Call to the method in FireAuth to check if the user exist in the FireAuthentication
+            FireAuth.login(email, password) { result, type ->
+                //if the auth is ok, the user is redirect on his home page
+                if (result) {
+
+                    finish()
+
+                } else {
+                    //Snackbar in case of failed auth
+                    Snackbar.make(
+                        binding.constraintActivityLogin,
+                        "Authentication failed!",
+                        Snackbar.LENGTH_LONG
+                    )
+                        .setBackgroundTint(ContextCompat.getColor(this, R.color.app_foreground))
+                        .setTextColor(ContextCompat.getColor(this, R.color.white))
+                        .show()
+
+                    //setting blank the field and restore visibility
+                    resetVisibilityForLoginNoFB()
+                }
+            }
+        }
+
+        binding.btnCreateAccount.setOnClickListener {
+            FireAuth.signOut()
+            val intent = Intent(this, RegistraionActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if(FireAuth.getCurrentUserAuth()!=null){
+            startHomeAthlete()
         }
     }
 
     //Starting the athlete activity
     private fun startHomeAthlete() {
-        val intent = Intent(this, ActivityHomeAthlete::class.java)
+        val intent = Intent(this, HomeActivity::class.java)
         Toast.makeText(
             this, "Welcome back athlete!",
             Toast.LENGTH_SHORT
@@ -44,86 +96,44 @@ class ActivityLogin : AppCompatActivity() {
         finish()
     }
 
-    //On click for the login button
-    fun onClickLogin(@Suppress("UNUSED_PARAMETER") v: View) {
-
-        val email = emailFieldLogin.text.toString().trim()
-        val password = passwordFieldLogin.text.toString().trim()
-
-        //Setting the visibility for login
-        setVisibilityForLoginNoFB()
-
-        //Call to the method in FireAuth to check if the user exist in the FireAuthentication
-        FireAuth.login(email, password) { result, type ->
-            //if the auth is ok, the user is redirect on his home page
-            if (result) {
-
-                finish()
-
-            } else {
-                //Snackbar in case of failed auth
-                Snackbar.make(
-                    constraintActivityLogin,
-                    getString(R.string.authentication_failed),
-                    Snackbar.LENGTH_LONG
-                )
-                    .setBackgroundTint(ContextCompat.getColor(this, R.color.app_foreground))
-                    .setTextColor(ContextCompat.getColor(this, R.color.white))
-                    .show()
-
-                //setting blank the field and restore visibility
-                resetVisibilityForLoginNoFB()
-            }
-        }
-    }
-
     //Visibility No FB
     private fun setVisibilityForLoginNoFB() {
-        progressBarLogin.visibility = View.VISIBLE
-        titleAppLogin.visibility = View.INVISIBLE
-        btnLoginFacebook.visibility = View.INVISIBLE
-        imageViewBackgroundLogin.visibility = View.INVISIBLE
-        layoutLoginEditTextEmail.visibility = View.INVISIBLE
-        layoutLoginEditTextPassword.visibility = View.INVISIBLE
-        btnLogin.visibility = View.INVISIBLE
-        btnCreateAccount.visibility = View.INVISIBLE
+        binding.progressBarLogin.visibility = View.VISIBLE
+        binding.titleAppLogin.visibility = View.INVISIBLE
+        binding.imageViewBackgroundLogin.visibility = View.INVISIBLE
+        binding.layoutLoginEditTextEmail.visibility = View.INVISIBLE
+        binding.layoutLoginEditTextPassword.visibility = View.INVISIBLE
+        binding.btnLogin.visibility = View.INVISIBLE
+        binding.btnCreateAccount.visibility = View.INVISIBLE
 
         //Resetting the field
-        layoutLoginEditTextEmail.error = null
-        layoutLoginEditTextPassword.error = null
+        binding.layoutLoginEditTextEmail.error = null
+        binding.layoutLoginEditTextPassword.error = null
     }
 
     //Resetting the field and the visibility
     private fun resetVisibilityForLoginNoFB() {
-        progressBarLogin.visibility = View.INVISIBLE
-        titleAppLogin.visibility = View.VISIBLE
-        btnLoginFacebook.visibility = View.VISIBLE
-        imageViewBackgroundLogin.visibility = View.VISIBLE
-        layoutLoginEditTextEmail.visibility = View.VISIBLE
-        layoutLoginEditTextPassword.visibility = View.VISIBLE
-        btnLogin.visibility = View.VISIBLE
-        btnCreateAccount.visibility = View.VISIBLE
+        binding.progressBarLogin.visibility = View.INVISIBLE
+        binding.titleAppLogin.visibility = View.VISIBLE
+        binding.imageViewBackgroundLogin.visibility = View.VISIBLE
+        binding.layoutLoginEditTextEmail.visibility = View.VISIBLE
+        binding.layoutLoginEditTextPassword.visibility = View.VISIBLE
+        binding.btnLogin.visibility = View.VISIBLE
+        binding.btnCreateAccount.visibility = View.VISIBLE
 
-        emailFieldLogin.setText("")
-        passwordFieldLogin.setText("")
+        binding.emailFieldLogin.setText("")
+        binding.passwordFieldLogin.setText("")
 
-        layoutLoginEditTextEmail.error = getString(R.string.fields_not_correct)
-        layoutLoginEditTextEmail.errorIconDrawable = null
-        layoutLoginEditTextPassword.error = getString(R.string.fields_not_correct)
-        layoutLoginEditTextPassword.errorIconDrawable = null
-
-        YoYo.with(Techniques.Shake)
-            .playOn(layoutLoginEditTextEmail)
+        binding.layoutLoginEditTextEmail.error = getString(R.string.field_uncorrected)
+        binding.layoutLoginEditTextEmail.errorIconDrawable = null
+        binding.layoutLoginEditTextPassword.error = getString(R.string.field_uncorrected)
+        binding.layoutLoginEditTextPassword.errorIconDrawable = null
 
         YoYo.with(Techniques.Shake)
-            .playOn(layoutLoginEditTextPassword)
+            .playOn(binding.layoutLoginEditTextEmail)
+
+        YoYo.with(Techniques.Shake)
+            .playOn(binding.layoutLoginEditTextPassword)
     }
 
-    //Starting the choice activity
-    fun onClickRegistration(@Suppress("UNUSED_PARAMETER") v: View) {
-        FireAuth.signOut()
-        val intent = Intent(this, ActivityUserChoice::class.java)
-        startActivity(intent)
-        finish()
-    }
 }

@@ -7,17 +7,19 @@ import android.os.Parcelable
  */
 
 data class ObjDayOfWo(
-    val nameOfDay: String?,
-    var listOfExercise: ArrayList<ObjExercise?> = ArrayList(12),
+    var nameOfDay: String? = null,
+    var listOfExercise: ArrayList<ObjExercise?>? = null,
 ) : Parcelable {
+
+    @Suppress("UNCHECKED_CAST")
     constructor(parcel: Parcel) : this(
         parcel.readString(),
-
-    ) {
-    }
+        parcel.readArrayList(null) as? ArrayList<ObjExercise?>
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(nameOfDay)
+        parcel.writeList(listOfExercise)
     }
 
     override fun describeContents(): Int {
