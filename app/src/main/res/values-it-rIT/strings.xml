@@ -1,0 +1,8 @@
+<resources>
+    <string name="insert_email">Inserire email</string>
+    <string name="insert_password">Inserire password</string>
+    <string name="create_account">CREA ACCOUNT</string>
+    <string name="field_uncorrected">Campi non corretti</string>
+    <string name="auth_failed">AUTENTICAZIONE FALLITA!</string>
+    <string name="welcome_back">BENTORNATO!</string>
+</resources>

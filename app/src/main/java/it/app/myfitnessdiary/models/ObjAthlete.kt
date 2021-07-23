@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class ObjAthlete(
-    var name: String?= null,
+    var name: String? = null,
     var surname: String? = null,
     var dateOfBirth: String? = null,
     var height: Int? = null,

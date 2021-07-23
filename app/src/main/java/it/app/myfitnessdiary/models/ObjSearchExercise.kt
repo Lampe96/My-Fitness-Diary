@@ -2,7 +2,6 @@ package it.app.myfitnessdiary.models
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.io.Serializable
 
 /**
  * Class used to create the object for the

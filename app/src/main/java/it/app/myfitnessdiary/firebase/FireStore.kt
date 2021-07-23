@@ -42,7 +42,7 @@ class FireStore {
             } else {
                 //If is the first time we add the day to an empty list
                 val firstWrite = ObjSchedule(ArrayList())
-                firstWrite.listOfDays.add(dayOfWo)
+                firstWrite.listOfDays?.add(dayOfWo)
 
                 db.collection(COLLECTIONATHLETE).document(athleteId)
                     .update("Schedule", firstWrite)
@@ -52,40 +52,40 @@ class FireStore {
 
     //To manage an existing schedule
     @Suppress("UNCHECKED_CAST")
-    fun updateExistingSchedule(athleteId: String, dayOfWo: ObjDayOfWo) {
-        getAthlete(athleteId) { athlete ->
-            val schedule = athlete!!["Schedule"]
+            /*fun updateExistingSchedule(athleteId: String, dayOfWo: ObjDayOfWo) {
+                getAthlete(athleteId) { athlete ->
+                    val schedule = athlete!!["Schedule"]
 
-            schedule as HashMap<String, ArrayList<HashMap<String, Any>>>
+                    schedule as HashMap<String, ArrayList<HashMap<String, Any>>>
 
-            //Getting the array called "listOfDays" on firestore
-            schedule["listOfDays"]!!.forEach { mapDay ->
+                    //Getting the array called "listOfDays" on firestore
+                    schedule["listOfDays"]!!.forEach { mapDay ->
 
-                //Looking for the right day, on the map inside listOfDays
-                if (mapDay["nameOfDay"]!! == dayOfWo.nameOfDay) {
-                    mapDay["listOfExercise"] = dayOfWo.listOfExercise
+                        //Looking for the right day, on the map inside listOfDays
+                        if (mapDay["nameOfDay"]!! == dayOfWo.nameOfDay) {
+                            mapDay["listOfExercise"] = dayOfWo.listOfExercise
 
-                    db.collection(COLLECTIONATHLETE).document(athleteId)
-                        .update("Schedule", schedule)
+                            db.collection(COLLECTIONATHLETE).document(athleteId)
+                                .update("Schedule", schedule)
+                        }
+                    }
                 }
-            }
-        }
-    }
+            }*/
 
     //FUN USED FOR USER ATHLETE
 
     //Fun used to save the trainer on firestore
-    fun saveAthlete(documentId: String, callback: (Boolean) -> Unit) {
-        db.collection(COLLECTIONATHLETE).document(documentId).set()
-            .addOnSuccessListener {
-                Log.d(TAG, "The storing of the document: success")
-                callback(true)
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "The storing of the document: failed", e)
-                callback(false)
-            }
-    }
+            /*fun saveAthlete(documentId: String, callback: (Boolean) -> Unit) {
+                db.collection(COLLECTIONATHLETE).document(documentId).set()
+                    .addOnSuccessListener {
+                        Log.d(TAG, "The storing of the document: success")
+                        callback(true)
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(TAG, "The storing of the document: failed", e)
+                        callback(false)
+                    }
+            }*/
 
     //Getting the document of athlete
     fun getAthlete(idAthlete: String, callback: (Map<String, Any>?) -> Unit) {

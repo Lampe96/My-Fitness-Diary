@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "997564599644",
+    "project_id": "my-fitness-diary-3deac",
+    "storage_bucket": "my-fitness-diary-3deac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997564599644:android:81b37835b8c2539fb90599",
+        "android_client_info": {
+          "package_name": "it.app.myfitnessdiary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997564599644-3ov3ubo59g0df377pkjnk69ag7p4h0t8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeF362U4sVTqvumwsgxdekKLQ39aS4fd4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997564599644-3ov3ubo59g0df377pkjnk69ag7p4h0t8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

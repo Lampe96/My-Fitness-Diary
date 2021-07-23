@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">My Fitness Diary</string>
-    <string name="insert_email_login">Insert email</string>
-    <string name="insert_password_login">Insert password</string>
-    <string name="btn_login">Login</string>
-    <string name="btn_create_account_login">Create account</string>
+    <string name="app_name" translatable="false">My Fitness Diary</string>
+    <string name="insert_email">Insert email</string>
+    <string name="insert_password">Insert password</string>
+    <string name="login" translatable="false">LOGIN</string>
+    <string name="create_account">CREATE ACCOUNT</string>
     <string name="field_uncorrected">Field uncorrected</string>
+    <string name="auth_failed">AUTHENTICATION FAILED!</string>
+    <string name="welcome_back">WELCOME BACK!</string>
 </resources>

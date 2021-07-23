@@ -1,4 +1,5 @@
 package it.app.myfitnessdiary.models
+
 import android.os.Parcel
 import android.os.Parcelable
 

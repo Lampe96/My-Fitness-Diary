@@ -20,28 +20,13 @@ class FireAuth {
         private val auth = Firebase.auth
         private const val TAG = "FIREAUTH"
 
-        //Fun to check email and pass
-        fun login(email: String, password: String, callback: (Boolean, Int) -> Unit) {
-            if (email.isBlank() || password.isBlank()) {
-                callback(false, -1)
-            } else {
-                auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            // Sign-in success
-                            val currentUserId = auth.currentUser?.uid!!
-                            Log.d(TAG, "SignInWithEmail: success")
+        //Used to enter in the app if user is already logged-in
+        fun getCurrentUser(): FirebaseUser? {
+            return auth.currentUser
+        }
 
-                            //Looking for user type
-                            val fireStore = FireStore()
-
-                        } else {
-                            // If sign in fails
-                            Log.w(TAG, "SignInWithEmail: failure", task.exception)
-                            callback(false, -1)
-                        }
-                    }
-            }
+        fun signOut() {
+            auth.signOut()
         }
 
         //Creating the account on fireAuth
@@ -55,9 +40,9 @@ class FireAuth {
                 .addOnCompleteListener(activity) { task ->
                     if (task.isSuccessful) {
                         // Creation on fireAuth success
-                        val currentUserId = auth.currentUser?.uid.toString()
+                        val userId = auth.currentUser!!.uid
                         Log.d(TAG, "CreateUserWithEmail: success")
-                        callback(true, currentUserId)
+                        callback(true, userId)
                     } else {
                         // If Creation on fireAuth fails
                         Log.w(TAG, "CreateUserWithEmail: failure", task.exception)
@@ -66,27 +51,30 @@ class FireAuth {
                 }
         }
 
-        //Used to enter in the app if user is already logged-in
-        fun getCurrentUserAuth(): FirebaseUser? {
-            return auth.currentUser
-        }
+        //Fun to check email and pass
+        fun login(email: String, password: String, callback: (Boolean) -> Unit) {
+            if (email.isBlank() || password.isBlank()) {
+                callback(false)
+            } else {
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // Sign-in success
+                            Log.d(TAG, "SignInWithEmail: success")
+                            callback(false)
 
-        //Deleting user from fireAuth
-        fun deleteCurrentUser() {
-            auth.currentUser?.delete()?.addOnSuccessListener {
-                Log.d(TAG, "Delete account: success")
-            }?.addOnFailureListener { e ->
-                Log.w(TAG, "Delete account: failure", e)
+                        } else {
+                            // If sign in fails
+                            Log.w(TAG, "SignInWithEmail: failure", task.exception)
+                            callback(false)
+                        }
+                    }
             }
-        }
-
-        fun signOut() {
-            auth.signOut()
         }
 
         //Used for reauth of user, before deleting the account.
         //We used that to avoid the eventual fail delete from fireAuth
-        fun userReauthenticate(password: String, callback: (Boolean) -> Unit) {
+        fun reauthenticateCurrentUser(password: String, callback: (Boolean) -> Unit) {
             if (password != "") {
                 val user = auth.currentUser!!
                 val credential = EmailAuthProvider.getCredential(user.email!!, password)
@@ -104,6 +92,15 @@ class FireAuth {
             } else {
                 callback(false)
             }
+        }
+    }
+
+    //Deleting user from fireAuth
+    fun deleteCurrentUser() {
+        auth.currentUser?.delete()?.addOnSuccessListener {
+            Log.d(TAG, "Delete account: success")
+        }?.addOnFailureListener { e ->
+            Log.w(TAG, "Delete account: failure", e)
         }
     }
 }
